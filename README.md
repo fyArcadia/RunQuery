@@ -24,6 +24,7 @@ COL_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b2<br/>
 配置文件可以在`Preferences->Package Settings->RunQuery->RunQuery Settings`中打开。
 * `DefaultDatabase属性`是默认连接的数据库，当`sublime-keymap`文件中的`database`属性为空时默认连接的数据库。
 * `Provider属性`是数据库连接器。目前RunQuery支持Oracle、SqlServer、Access、SQLite这几种数据库。
+
 <table>
   <tr>
     <td>Database</td>
