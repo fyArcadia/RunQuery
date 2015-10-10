@@ -1,0 +1,56 @@
+[
+    {
+        "caption": "Preferences",
+        "mnemonic": "n",
+        "id": "preferences",
+        "children":
+        [
+            {
+                "caption": "Package Settings",
+                "mnemonic": "P",
+                "id": "package-settings",
+                "children":
+                [
+                    {
+                        "caption": "RunQuery",
+                        "children":
+                        [
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/RunQuery/runquery.sublime-settings"
+                                },
+                                "caption": "RunQuery Settings"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/RunQuery/Default (Windows).sublime-keymap"
+                                    ,"platform": "Windows"
+                                },
+                                "caption": "Key Bindings"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/RunQuery/Default (OSX).sublime-keymap"
+                                    ,"platform": "OSX"
+                                },
+                                "caption": "Key Bindings"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/RunQuery/Default (Linux).sublime-keymap"
+                                    ,"platform": "Linux"
+                                },
+                                "caption": "Key Bindings"
+                            },
+                            { "caption": "-" }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

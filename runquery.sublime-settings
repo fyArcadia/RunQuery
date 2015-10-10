@@ -1,0 +1,12 @@
+{
+    "RunQueryPath": "RunQuery\\bin\\RunQuery.exe",
+    "DefaultDatabase": "SampleName",
+    "SampleName": {
+        "Provider": "Byd.Connection.OracleDbProvider",
+        "ConnectionString": "Data Source=Sample_DataSource;User ID=SampleUser;Password=SamplePassword"
+    },
+    "SampleName2": {
+        "Provider": "Byd.Connection.OracleDbProvider",
+        "ConnectionString": "Data Source=Sample_DataSource2;User ID=SampleUser2;Password=SamplePassword2"
+    }
+}
