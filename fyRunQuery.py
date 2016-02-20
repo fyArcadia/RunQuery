@@ -72,6 +72,7 @@ class RunQuery(sublime_plugin.TextCommand):
 class DefaultFormat(object):
     NORMAL_SQL = "NormalSql"
     GET_TABLE_COLUMNS = "GetTableColumns"
+    GET_TABLE_DEF = "GetTableDef"
     CREATE_SQL = "CreateSql"
 
     def format(self, sql):
@@ -98,6 +99,39 @@ class OracleFormat(object):
             WHERE TABLE_NAME = '%s'
             ORDER BY COLUMN_ID
             ''' % (sql, sql.split(",")[1])
+        elif (sql.upper().find("DEF,") == 0) and len(sql.split(",")) == 2:
+            self.formatType = DefaultFormat.GET_TABLE_DEF
+            return """
+            SELECT
+                TEXT
+            FROM
+                (
+                    SELECT
+                        TABLE_NAME
+                        ,2 AS SUB_SORT
+                        ,'COMMENT ON TABLE ' || TABLE_NAME || ' IS ''' || COMMENTS || '''' || CHR(10) || '/' AS TEXT
+                    FROM USER_TAB_COMMENTS
+                    WHERE TABLE_TYPE IN ('TABLE', 'VIEW')
+                    UNION ALL
+                    SELECT
+                        TABLE_NAME
+                        ,3 AS SUB_SORT
+                        ,'COMMENT ON COLUMN ' || TABLE_NAME || '.' || COLUMN_NAME || ' IS ''' || COMMENTS || '''' || CHR(10) || '/' AS TEXT
+                    FROM USER_COL_COMMENTS
+                    WHERE COMMENTS IS NOT NULL
+                    UNION ALL
+                    SELECT
+                        OBJECT_NAME AS TABLE_NAME
+                        ,1 AS SUB_SORT
+                        ,TO_CHAR(DBMS_METADATA.GET_DDL(OBJECT_TYPE, OBJECT_NAME)) || CHR(10) || '/' AS TEXT
+                    FROM USER_OBJECTS
+                    WHERE OBJECT_TYPE IN ('TABLE', 'VIEW')
+                )
+            WHERE TABLE_NAME = '%s'
+            ORDER BY
+                TABLE_NAME
+                ,SUB_SORT
+            """ % sql.split(",")[1]
         elif sql.find(' ') == -1:
             self.formatType = DefaultFormat.GET_TABLE_COLUMNS
             return """
@@ -165,6 +199,19 @@ class OracleFormat(object):
             if len(cols) == 0:
                 return "Table is not found."
             return result % cols
+        elif self.formatType == DefaultFormat.GET_TABLE_DEF:
+            newResult = ""
+            arr = result.splitlines(1)
+            if len(arr) >= 2:
+                del arr[0]
+            if len(arr) >= 1:
+                del arr[0]
+            if len(arr) > 1:
+                for row in arr:
+                    newResult = newResult + row
+                return newResult
+            else:
+                return "Table is not found."
         else:
             return result
 
